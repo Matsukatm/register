@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link rel="stylesheet" href="homepage.css" />
+  </head>
+  <body>
+    <div class="header">
+      <div class="user-info">
+        <h1>Welcome</h1>
+        <div class="user-name" id="userName"></div>
+        <div class="user-email" id="userEmail"></div>
+      </div>
+      <div class="logout">
+        <button id="saveButton">Save</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <h2>Table</h2>
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Admission Number</th>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+            <th>Saturday</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Example row, rows will be dynamically added -->
+          <tr>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      <button id="addStudentButton">Add Student</button>
+    </div>
+
+    <!-- Modal -->
+    <div id="studentModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="studentForm">
+          <div class="form-group">
+            <label for="studentName">Student Name:</label>
+            <input type="text" id="studentName" name="studentName" required />
+          </div>
+          <div class="form-group">
+            <label for="admissionNumber">Admission Number:</label>
+            <input
+              type="text"
+              id="admissionNumber"
+              name="admissionNumber"
+              required
+            />
+          </div>
+          <button type="submit">Save</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Retrieve saved user details from localStorage
+      var user = JSON.parse(localStorage.getItem("user"));
+
+      // Display the retrieved user details on the homepage
+      if (user) {
+        document.getElementById("userName").textContent = user.name;
+        document.getElementById("userEmail").textContent = user.email;
+      }
+
+      // Open the modal for adding a student
+      document
+        .getElementById("addStudentButton")
+        .addEventListener("click", function () {
+          document.getElementById("studentModal").style.display = "block";
+        });
+
+      // Close the modal when the close button is clicked
+      document.querySelector(".close").addEventListener("click", function () {
+        document.getElementById("studentModal").style.display = "none";
+      });
+
+      // Handle form submission in the modal
+      document
+        .getElementById("studentForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          var studentName = document.getElementById("studentName").value;
+          var admissionNumber =
+            document.getElementById("admissionNumber").value;
+
+          var table = document
+            .getElementById("dataTable")
+            .getElementsByTagName("tbody")[0];
+          var newRow = table.insertRow();
+          var numberCell = newRow.insertCell(0);
+          var nameCell = newRow.insertCell(1);
+          var admissionCell = newRow.insertCell(2);
+          var mondayCell = newRow.insertCell(3);
+          var tuesdayCell = newRow.insertCell(4);
+          var wednesdayCell = newRow.insertCell(5);
+          var thursdayCell = newRow.insertCell(6);
+          var fridayCell = newRow.insertCell(7);
+          var saturdayCell = newRow.insertCell(8);
+
+          var rowCount = table.rows.length; // Get number of rows, excluding header
+          numberCell.textContent = rowCount;
+          nameCell.textContent = studentName;
+          admissionCell.textContent = admissionNumber;
+
+          document.getElementById("studentModal").style.display = "none";
+        });
+
+      // Handle Save Button
+      document
+        .getElementById("saveButton")
+        .addEventListener("click", function () {
+          var table = document.getElementById("dataTable");
+          var rows = table
+            .getElementsByTagName("tbody")[0]
+            .getElementsByTagName("tr");
+          var studentData = [];
+
+          for (var i = 0; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName("td");
+            studentData.push({
+              number: cells[0].textContent,
+              name: cells[1].textContent,
+              admissionNumber: cells[2].textContent,
+              monday: cells[3].textContent,
+              tuesday: cells[4].textContent,
+              wednesday: cells[5].textContent,
+              thursday: cells[6].textContent,
+              friday: cells[7].textContent,
+              saturday: cells[8].textContent,
+            });
+          }
+
+          // Save the table data to localStorage
+          localStorage.setItem("studentData", JSON.stringify(studentData));
+          localStorage.setItem("totalStudents", studentData.length);
+
+          // Redirect to home.html
+          window.location.href = "home.html";
+        });
+    </script>
+  </body>
+</html>

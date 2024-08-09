@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attendance Register</title>
+    <link rel="stylesheet" href="home.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="sidebar">
+        <div class="logo">
+          <img src="images/logo.jpg" alt="Logo" />
+        </div>
+        <ul class="nav">
+          <li class="nav-item my-classes"><a href="#">My Classes</a></li>
+          <li class="nav-item new-class">
+            <a href="create_class.html">New Class</a>
+          </li>
+          <li class="nav-item summary"><a href="#">Summary</a></li>
+        </ul>
+      </div>
+      <div class="main-content">
+        <div class="header">
+          <h1>STUDENT ATTENDANCE REGISTER</h1>
+          <div class="user-info">
+            <h2>
+              TEACHER X <br />
+              teacherx@gmail.com
+            </h2>
+          </div>
+        </div>
+        <div class="actions">
+          <a href="create_class.html">
+            <button class="button">Create New Class</button>
+          </a>
+          <button class="button secondary">My summary</button>
+        </div>
+        <div class="appraisals">
+          <h2>My Classes</h2>
+          <table>
+            <thead>
+              <th>
+                <th>Year</th>
+                <th>Term</th>
+                <th>Account Type</th>
+                <th>Course/ Subject</th>
+                <th>Subject</th>
+                <th>No of Students</th>
+                <th>Department</th>
+                <th>week</th>
+                <th>Date Created</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="classTableBody">
+              <!-- Rows will be inserted here dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Function to load classes from localStorage and populate the table
+      function loadClasses() {
+        const classTableBody = document.getElementById("classTableBody");
+        const classes = JSON.parse(localStorage.getItem("classes")) || [];
+
+        // Clear the existing rows
+        classTableBody.innerHTML = "";
+
+        // Loop through the classes and create table rows
+        classes.forEach((classItem, index) => {
+          const row = document.createElement("tr");
+
+          row.innerHTML = `
+            <td>${classItem.year}</td>
+            <td>${classItem.term}</td>
+            <td>${classItem.accountType}</td>
+            <td>${classItem.className}</td>
+            <td>${classItem.course}</td>
+            <td>${classItem.subject}</td>
+            <td>${classItem.noOfStudents}</td>
+            <td>${classItem.department}</td>
+            <td>${classItem.week}</td>
+            <td>${classItem.dateCreated}</td>
+            <td>
+              <button class="button action" onclick="viewClass(${index})">View Class</button>
+            </td>
+          `;
+
+          classTableBody.appendChild(row);
+        });
+      }
+
+      // Example function to handle viewing a class (you can customize it)
+      function viewClass(index) {
+        // You can redirect to a class details page or show more info
+        alert("View details for class: " + index);
+      }
+      function viewClass() {
+        window.location.href = "homepage.html";
+      }
+
+      // Call loadClasses on page load
+      window.onload = loadClasses;
+    </script>
+  </body>
+</html>
